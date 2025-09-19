@@ -104,13 +104,13 @@ The bot will automatically detect the new category and make it available as a co
    ```
 
 3. **Configure environment**
-   
+
    **Option A: Using .env file (recommended)**
    ```bash
    cp .env.example .env
    # Edit .env and add your Discord bot token
    ```
-   
+
    **Option B: Using environment variables**
    ```bash
    export DISCORD_BOT_TOKEN=your_bot_token_here
