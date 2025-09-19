@@ -1,6 +1,6 @@
 # Wooper Bot Makefile
 
-.PHONY: run build test fmt clean help
+.PHONY: run build test test-unit test-integration fmt clean help
 
 # Default target
 .DEFAULT_GOAL := help
@@ -15,8 +15,14 @@ run: ## Run the bot
 build: ## Build the binary
 	go build -o wooper-bot .
 
-test: ## Run tests
+test: ## Run all tests (unit + integration)
 	go test ./...
+
+test-unit: ## Run unit tests only
+	go test ./internal/...
+
+test-integration: ## Run integration tests only
+	go test ./tests/integration/...
 
 fmt: ## Format code
 	go fmt ./...
