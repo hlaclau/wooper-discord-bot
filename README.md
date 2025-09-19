@@ -151,21 +151,28 @@ wooper-bot/
 ├── img/                 # Image directories
 │   ├── wooper/          # Wooper images
 │   │   ├── wooper1.jpg
-│   │   ├── wooper2.jpg
-│   │   └── Wooper_anime.webp
+│   │   └── wooper2.jpg
 │   └── cats/            # Cat images (example)
 │       └── README.txt
-└── internal/            # Internal packages
-    ├── bot/             # Discord bot wrapper
-    │   └── bot.go
-    ├── config/          # Configuration management
-    │   └── config.go
-    ├── handlers/        # Message event handlers
-    │   └── messages.go
-    ├── logger/          # Structured logging with Zap
-    │   └── logger.go
-    └── services/        # Business logic services
-        └── image.go
+├── internal/            # Internal packages
+│   ├── bot/             # Discord bot wrapper
+│   │   ├── bot.go
+│   │   └── bot_test.go
+│   ├── config/          # Configuration management
+│   │   ├── config.go
+│   │   └── config_test.go
+│   ├── handlers/        # Message event handlers
+│   │   ├── messages.go
+│   │   └── messages_test.go
+│   ├── logger/          # Structured logging with Zap
+│   │   ├── logger.go
+│   │   └── logger_test.go
+│   └── services/        # Business logic services
+│       ├── image.go
+│       └── image_test.go
+└── tests/               # Test files
+    └── integration/     # Integration tests
+        └── integration_test.go
 ```
 
 ## Architecture
@@ -192,12 +199,14 @@ The bot follows a clean, layered architecture:
 The project includes a simple Makefile for common development tasks:
 
 ```bash
-make help    # Show available commands
-make run     # Run the bot
-make build   # Build the binary
-make test    # Run tests
-make fmt     # Format code
-make clean   # Clean build artifacts
+make help              # Show available commands
+make run               # Run the bot
+make build             # Build the binary
+make test              # Run all tests (unit + integration)
+make test-unit         # Run unit tests only
+make test-integration  # Run integration tests only
+make fmt               # Format code
+make clean             # Clean build artifacts
 ```
 
 ### Building
@@ -211,9 +220,13 @@ go build -o wooper-bot .
 ### Running Tests
 
 ```bash
-make test
+make test              # Run all tests (unit + integration)
+make test-unit         # Run unit tests only
+make test-integration  # Run integration tests only
 # or
-go test ./...
+go test ./...                    # All tests
+go test ./internal/...          # Unit tests only
+go test ./tests/integration/... # Integration tests only
 ```
 
 ### Code Quality
