@@ -118,6 +118,11 @@ The bot will automatically detect the new category and make it available as a co
 
 4. **Run the bot**
    ```bash
+   make run
+   ```
+
+   Or use the traditional Go command:
+   ```bash
    go run ./...
    ```
 
@@ -182,15 +187,32 @@ The bot follows a clean, layered architecture:
 
 ## Development
 
+### Makefile Commands
+
+The project includes a simple Makefile for common development tasks:
+
+```bash
+make help    # Show available commands
+make run     # Run the bot
+make build   # Build the binary
+make test    # Run tests
+make fmt     # Format code
+make clean   # Clean build artifacts
+```
+
 ### Building
 
 ```bash
+make build
+# or
 go build -o wooper-bot .
 ```
 
 ### Running Tests
 
 ```bash
+make test
+# or
 go test ./...
 ```
 
