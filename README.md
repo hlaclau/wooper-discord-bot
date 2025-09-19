@@ -94,7 +94,7 @@ The bot will automatically detect the new category and make it available as a co
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone git@github.com:hlaclau/wooper-discord-bot.git
    cd wooper-bot
    ```
 
