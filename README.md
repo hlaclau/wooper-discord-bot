@@ -8,6 +8,7 @@ A Discord bot built in Go that sends random images from organized local director
 - **Local Image Storage**: Fast, reliable image serving from local directories
 - **Dynamic Command Discovery**: Automatically creates commands based on available image folders
 - **Help System**: Built-in help command to list available image categories
+- **Comprehensive Logging**: Structured logging with Zap for command tracking, user metrics, and performance monitoring
 - **Clean Architecture**: Modular design with separate packages for config, services, handlers, and bot logic
 - **Environment Configuration**: Support for `.env` files and environment variables
 - **Graceful Shutdown**: Proper signal handling for clean shutdowns
@@ -36,6 +37,40 @@ img/
 ```
 
 Supported image formats: `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`
+
+## Logging
+
+The bot includes comprehensive structured logging using Zap. Logs include:
+
+- **Command Tracking**: Every command execution with user info, timing, and results
+- **Performance Metrics**: Response times for image operations
+- **User Analytics**: Who is using which commands and when
+- **Error Tracking**: Detailed error information for debugging
+- **System Events**: Bot startup, image service initialization, etc.
+
+### Log Levels
+
+Set the log level using the `LOG_LEVEL` environment variable:
+- `debug` - All messages including debug info
+- `info` - General information (default)
+- `warn` - Warnings and errors
+- `error` - Errors only
+
+### Example Log Output
+
+```json
+{
+  "timestamp": "2024-01-20T10:30:45Z",
+  "level": "info",
+  "message": "Command received",
+  "command": "!wooper",
+  "category": "wooper",
+  "user": "username",
+  "user_id": "123456789",
+  "channel_id": "987654321",
+  "guild_id": "111222333"
+}
+```
 
 ### Adding New Image Categories
 
@@ -122,6 +157,8 @@ wooper-bot/
     │   └── config.go
     ├── handlers/        # Message event handlers
     │   └── messages.go
+    ├── logger/          # Structured logging with Zap
+    │   └── logger.go
     └── services/        # Business logic services
         └── image.go
 ```
@@ -131,8 +168,9 @@ wooper-bot/
 The bot follows a clean, layered architecture:
 
 - **`internal/config`**: Environment variable loading with `.env` support
+- **`internal/logger`**: Structured logging configuration and initialization
 - **`internal/services`**: Business logic for local image management and category discovery
-- **`internal/handlers`**: Discord message event processing with dynamic command support
+- **`internal/handlers`**: Discord message event processing with dynamic command support and comprehensive logging
 - **`internal/bot`**: Discord session management and lifecycle
 - **`main.go`**: Dependency injection and application startup
 
@@ -140,6 +178,7 @@ The bot follows a clean, layered architecture:
 
 - **discordgo**: Discord API client for Go
 - **godotenv**: Environment variable loading from `.env` files
+- **zap**: High-performance structured logging
 
 ## Development
 
