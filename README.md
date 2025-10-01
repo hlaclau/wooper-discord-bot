@@ -124,30 +124,59 @@ The bot will automatically detect the new category and make it available as a co
    docker-compose logs -f wooper-bot
    ```
 
-#### Docker Deployment with Dokploy
+#### Docker Deployment with GitHub Actions + Dokploy (Recommended)
 
-For deploying to your Dokploy VPS:
+This approach uses GitHub Actions to build Docker images and Dokploy to deploy them, which is more efficient:
 
-1. **Push your code to a Git repository** (GitHub, GitLab, etc.)
+1. **Push your code to GitHub** (already done!)
 
-2. **In Dokploy dashboard:**
+2. **GitHub Actions will automatically:**
+   - Build Docker images on every push to `main` or `tests/docker` branches
+   - Push images to GitHub Container Registry (ghcr.io)
+   - Support multi-architecture builds (AMD64 + ARM64)
+
+3. **In Dokploy dashboard:**
+   - Create a new project
+   - Choose "Docker Image" as source type (not Git)
+   - Set image name: `ghcr.io/yourusername/wooper-bot:latest`
+   - Or use specific tags like `ghcr.io/yourusername/wooper-bot:main`
+
+4. **Environment Variables in Dokploy:**
+   - `DISCORD_BOT_TOKEN`: Your Discord bot token
+   - `LOG_LEVEL`: Optional, defaults to `info`
+
+5. **Deploy:**
+   - Dokploy will pull the pre-built image from GitHub Container Registry
+   - Much faster deployment since no building happens on your VPS
+   - The bot will be available and running on your VPS
+
+6. **Updating Images:**
+   - Push changes to your repository
+   - GitHub Actions builds and pushes new image automatically
+   - Dokploy can be configured to auto-update or you can manually trigger updates
+
+**Note:** The first time you use GitHub Container Registry, you may need to:
+- Go to your repository's "Packages" section on GitHub
+- Make the package public (or configure access for your VPS)
+- The image will be available at `ghcr.io/yourusername/wooper-bot:latest`
+
+#### Alternative: Direct Docker Build in Dokploy
+
+If you prefer Dokploy to build the image directly:
+
+1. **In Dokploy dashboard:**
    - Create a new project
    - Connect your Git repository
    - Set the build context to the root directory
    - Use the provided `Dockerfile`
 
-3. **Environment Variables in Dokploy:**
+2. **Environment Variables in Dokploy:**
    - `DISCORD_BOT_TOKEN`: Your Discord bot token
    - `LOG_LEVEL`: Optional, defaults to `info`
 
-4. **Deploy:**
-   - Dokploy will automatically build and deploy your container
+3. **Deploy:**
+   - Dokploy will build and deploy your container
    - The bot will be available and running on your VPS
-
-5. **Updating Images:**
-   - To add new images, simply push changes to your repository
-   - Dokploy will automatically rebuild and redeploy
-   - Or manually update the `img/` directory in your VPS and restart the container
 
 #### Option 2: Local Development
 
