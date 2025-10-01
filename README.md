@@ -5,6 +5,7 @@ A Discord bot built in Go that sends random images from organized local director
 ## Features
 
 - **Flexible Image Commands**: Create commands for any image category by organizing images in folders
+- **Slash Commands with Autocomplete**: Modern Discord slash commands with category autocomplete
 - **Local Image Storage**: Fast, reliable image serving from local directories
 - **Dynamic Command Discovery**: Automatically creates commands based on available image folders
 - **Help System**: Built-in help command to list available image categories
@@ -15,6 +16,12 @@ A Discord bot built in Go that sends random images from organized local director
 
 ## Commands
 
+### Slash Commands (Recommended)
+- `/image category:<category>` - Sends a random image from the specified category with autocomplete
+  - Example: `/image category:wooper`
+  - The category parameter will show available options with autocomplete
+
+### Legacy Text Commands
 - `!<category>` - Sends a random image from the specified category (e.g., `!wooper`, `!cats`, `!dogs`)
 - `!help` or `!list` - Shows all available image categories and image counts
 
@@ -87,10 +94,62 @@ The bot will automatically detect the new category and make it available as a co
 
 ### Prerequisites
 
-- Go 1.19 or later
+- Go 1.19 or later (for local development)
+- Docker and Docker Compose (for containerized deployment)
 - A Discord bot token
 
 ### Installation
+
+#### Option 1: Docker Deployment (Recommended for Production)
+
+1. **Clone the repository**
+   ```bash
+   git clone git@github.com:hlaclau/wooper-discord-bot.git
+   cd wooper-bot
+   ```
+
+2. **Configure environment**
+   ```bash
+   cp .env.example .env
+   # Edit .env and add your Discord bot token
+   ```
+
+3. **Run with Docker Compose**
+   ```bash
+   docker-compose up -d
+   ```
+
+4. **View logs**
+   ```bash
+   docker-compose logs -f wooper-bot
+   ```
+
+#### Docker Deployment with Dokploy
+
+For deploying to your Dokploy VPS:
+
+1. **Push your code to a Git repository** (GitHub, GitLab, etc.)
+
+2. **In Dokploy dashboard:**
+   - Create a new project
+   - Connect your Git repository
+   - Set the build context to the root directory
+   - Use the provided `Dockerfile`
+
+3. **Environment Variables in Dokploy:**
+   - `DISCORD_BOT_TOKEN`: Your Discord bot token
+   - `LOG_LEVEL`: Optional, defaults to `info`
+
+4. **Deploy:**
+   - Dokploy will automatically build and deploy your container
+   - The bot will be available and running on your VPS
+
+5. **Updating Images:**
+   - To add new images, simply push changes to your repository
+   - Dokploy will automatically rebuild and redeploy
+   - Or manually update the `img/` directory in your VPS and restart the container
+
+#### Option 2: Local Development
 
 1. **Clone the repository**
    ```bash
@@ -163,7 +222,9 @@ wooper-bot/
 │   │   └── config_test.go
 │   ├── handlers/        # Message event handlers
 │   │   ├── messages.go
-│   │   └── messages_test.go
+│   │   ├── messages_test.go
+│   │   ├── interactions.go
+│   │   └── interactions_test.go
 │   ├── logger/          # Structured logging with Zap
 │   │   ├── logger.go
 │   │   └── logger_test.go
@@ -182,7 +243,7 @@ The bot follows a clean, layered architecture:
 - **`internal/config`**: Environment variable loading with `.env` support
 - **`internal/logger`**: Structured logging configuration and initialization
 - **`internal/services`**: Business logic for local image management and category discovery
-- **`internal/handlers`**: Discord message event processing with dynamic command support and comprehensive logging
+- **`internal/handlers`**: Discord message event processing and slash command interactions with dynamic command support and comprehensive logging
 - **`internal/bot`**: Discord session management and lifecycle
 - **`main.go`**: Dependency injection and application startup
 

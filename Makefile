@@ -1,6 +1,6 @@
 # Wooper Bot Makefile
 
-.PHONY: run build test test-unit test-integration fmt clean help
+.PHONY: run build test test-unit test-integration fmt clean help docker-build docker-run docker-stop docker-logs
 
 # Default target
 .DEFAULT_GOAL := help
@@ -30,3 +30,16 @@ fmt: ## Format code
 clean: ## Clean build artifacts
 	go clean
 	rm -f wooper-bot
+
+# Docker commands
+docker-build: ## Build Docker image
+	docker build -t wooper-bot .
+
+docker-run: ## Run with Docker Compose
+	docker-compose up -d
+
+docker-stop: ## Stop Docker Compose
+	docker-compose down
+
+docker-logs: ## View Docker logs
+	docker-compose logs -f wooper-bot
